@@ -1,14 +1,23 @@
 from typing import Union
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from loguru import logger
+
+from naraningyeo.model import IncomingMessage, OutgoingMessage
 
 app = FastAPI()
 
 @app.get("/")
-def read_root():
+async def get_root():
     return {"Hello": "World"}
 
+@app.post("/")
+async def post_root(request: Request) -> OutgoingMessage:
+    logger.debug(f"request: {await request.json()}")
+    request = IncomingMessage.model_validate(await request.json())
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+    if "hello" in request.message:
+        do_reply = True
+    else:
+        do_reply = False
+    return OutgoingMessage(do_reply=do_reply, message="Hello, World!")
