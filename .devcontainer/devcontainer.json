@@ -6,10 +6,7 @@
 	"features": {
 		"ghcr.io/jsburckhardt/devcontainer-features/uv:1": {}
 	},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "uv sync"
+	"forwardPorts": [8000],
+	"postCreateCommand": "uv sync",
+	"postAttachCommand": "uv run uvicorn naraningyeo --host 0.0.0.0 --port 8000"
 }
